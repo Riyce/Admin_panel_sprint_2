@@ -6,7 +6,7 @@ from .env import env
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = env('SECRET_KEY')
 
-ALLOWED_HOSTS = env('ALLOWED_HOSTS')
+ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [
@@ -81,10 +81,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-STATIC_URL = '/static/'
-
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")

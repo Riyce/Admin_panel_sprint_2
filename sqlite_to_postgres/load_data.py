@@ -17,12 +17,12 @@ load_dotenv(BASE_DIR.joinpath('.env.sample'))
 
 
 def load_from_sqlite(
-    connection: sqlite3.Connection,
-    pg_conn: _connection,
-    batch_size: int
-):
-    postgres_saver = PostgresSaver(pg_conn)
-    sqlite_loader = SQLiteLoader(connection, batch_size)
+        connection: sqlite3.Connection,
+        pg_connection: _connection,
+        batch: int
+) -> None:
+    postgres_saver = PostgresSaver(pg_connection)
+    sqlite_loader = SQLiteLoader(connection, batch)
     for table in TABLES_ARRAY:
         sqlite_loader.get_table(table)
         has_data = True
@@ -49,11 +49,11 @@ if __name__ == '__main__':
     batch_size = 500
     try:
         with (
-            sqlite3.connect('db.sqlite') as sqlite_conn,
+            sqlite3.connect('db.sqlite') as sqlite_connection,
             psycopg2.connect(**dsl, cursor_factory=DictCursor) as pg_conn
         ):
-            load_from_sqlite(sqlite_conn, pg_conn, batch_size)
-        sqlite_conn.close()
+            load_from_sqlite(sqlite_connection, pg_conn, batch_size)
+        sqlite_connection.close()
         pg_conn.close()
     except psycopg2.OperationalError as error:
         logging.warning(
