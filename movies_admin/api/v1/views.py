@@ -39,7 +39,7 @@ class MovieBaseApi:
 class MoviesListApi(MovieBaseApi, BaseListView):
     paginate_by = 50
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, object_list=None, **kwargs):
         paginator, page, queryset, _ = self.paginate_queryset(
             self.get_queryset(),
             self.paginate_by
