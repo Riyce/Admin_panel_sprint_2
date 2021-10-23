@@ -40,7 +40,7 @@ if __name__ == '__main__':
         format='%(asctime)s | %(levelname)s - %(message)s',
     )
     dsl = {
-        'dbname': os.environ.get('DB_NAME'),
+        'dbname': os.environ.get('POSTGRES_DB'),
         'user': os.environ.get('POSTGRES_USER'),
         'password': os.environ.get('POSTGRES_PASSWORD'),
         'host': os.environ.get('POSTGRES_HOST'),

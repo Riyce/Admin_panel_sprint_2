@@ -1,13 +1,11 @@
 import os
 from pathlib import Path
 
-from .env import env
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 ALLOWED_HOSTS = ['*']
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
