@@ -1,6 +1,9 @@
+import logging
+
 from dataclasses import astuple, fields
 from typing import List
 
+from psycopg2 import DatabaseError
 from sqlite_to_postgres.base import BaseSQLConnector
 
 
@@ -23,8 +26,11 @@ class PostgresSaver(BaseSQLConnector):
             ).decode() for row in input_rows
         )
         table_fields = ','.join(fields_array)
-        self.cursor.execute(self.sql_template.format(
-            table=table,
-            table_fields=table_fields,
-            args=args
-        ))
+        try:
+            self.cursor.execute(self.sql_template.format(
+                table=table,
+                table_fields=table_fields,
+                args=args
+            ))
+        except DatabaseError as e:
+            logging.error(e)
