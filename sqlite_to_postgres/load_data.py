@@ -1,19 +1,14 @@
 import logging
 import os
-import pathlib
 import sqlite3
 
 import psycopg2
-from dotenv import load_dotenv
 from psycopg2.extensions import connection as _connection
 from psycopg2.extras import DictCursor
 
 from sqlite_to_postgres.postgressaver import PostgresSaver
 from sqlite_to_postgres.sqliteloader import SQLiteLoader
 from sqlite_to_postgres.utils import TABLES_ARRAY
-
-BASE_DIR = pathlib.Path(__file__).resolve().parent
-load_dotenv(BASE_DIR.joinpath('.env.sample'))
 
 
 def load_from_sqlite(
@@ -35,7 +30,7 @@ def load_from_sqlite(
 
 if __name__ == '__main__':
     logging.basicConfig(
-        handlers=[logging.FileHandler(BASE_DIR.joinpath('logs/loader.log'))],
+        handlers=[logging.FileHandler(__file__.replace('.py', '') + '.log')],
         level=logging.INFO,
         format='%(asctime)s | %(levelname)s - %(message)s',
     )
