@@ -8,10 +8,12 @@ services:
       - postgres_data:/var/lib/postgresql/data/
       - ./schema_design/db_schema.sql:/docker-entrypoint-initdb.d/init.sql
     env_file:
-      - ./.env
+      - envs/prod.env
 
   web_admin_panel:
-    build: .
+    build:
+      context: ./movies_admin
+      dockerfile: DockerfileAdmin
     restart: always
     container_name: web_admin_panel
     volumes:
@@ -19,7 +21,24 @@ services:
     depends_on:
       - db
     env_file:
-      - ./.env
+      - envs/prod.env
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.0
+    container_name: elasticsearch
+    depends_on:
+      - db
+    env_file:
+      - envs/prod.env
+    expose:
+      - 9200
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1" ]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    volumes:
+      - elastic_data:/usr/share/elasticsearch/data
 
   nginx:
     image: nginx:1.19.3
@@ -33,6 +52,23 @@ services:
     depends_on:
       - web_admin_panel
 
+  etl:
+    build:
+      context: ./postgres_to_es
+      dockerfile: DockerfileETL
+    restart: always
+    container_name: etl
+    depends_on:
+      - elasticsearch
+    env_file:
+      - envs/prod.env
+    volumes:
+      - etl_data:/code/states
+      - etl_data:/code/logs
+
+
 volumes:
   postgres_data:
   static_value:
+  elastic_data:
+  etl_data:

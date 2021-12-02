@@ -4,7 +4,7 @@ from dataclasses import astuple, fields
 from typing import List
 
 from psycopg2 import DatabaseError
-from sqlite_to_postgres.base import BaseSQLConnector
+from base import BaseSQLConnector
 
 
 class PostgresSaver(BaseSQLConnector):

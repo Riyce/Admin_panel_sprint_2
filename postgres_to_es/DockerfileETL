@@ -1,0 +1,7 @@
+FROM python:3.9.7-buster
+
+WORKDIR /code
+COPY requirements/base.txt .
+RUN pip3 install --upgrade pip && pip3 install -r base.txt
+COPY . .
+CMD ["python", "main.py"]

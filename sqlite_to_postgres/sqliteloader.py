@@ -3,8 +3,8 @@ from sqlite3 import OperationalError
 from sqlite3.dbapi2 import Connection
 from typing import List
 
-from sqlite_to_postgres.base import BaseSQLConnector
-from sqlite_to_postgres.utils import dict_factory
+from base import BaseSQLConnector
+from utils import dict_factory
 
 
 class SQLiteLoader(BaseSQLConnector):

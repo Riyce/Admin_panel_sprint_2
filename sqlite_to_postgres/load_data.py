@@ -6,9 +6,9 @@ import psycopg2
 from psycopg2.extensions import connection as _connection
 from psycopg2.extras import DictCursor
 
-from sqlite_to_postgres.postgressaver import PostgresSaver
-from sqlite_to_postgres.sqliteloader import SQLiteLoader
-from sqlite_to_postgres.utils import TABLES_ARRAY
+from postgressaver import PostgresSaver
+from sqliteloader import SQLiteLoader
+from utils import TABLES_ARRAY
 
 
 def load_from_sqlite(
@@ -43,12 +43,9 @@ if __name__ == '__main__':
     }
     batch_size = 500
     try:
-        with (
-            sqlite3.connect('db.sqlite') as sqlite_connection,
-            psycopg2.connect(**dsl, cursor_factory=DictCursor) as pg_conn
-        ):
-            load_from_sqlite(sqlite_connection, pg_conn, batch_size)
-        sqlite_connection.close()
+        with sqlite3.connect('db.sqlite') as sqlite_conn, psycopg2.connect(**dsl, cursor_factory=DictCursor) as pg_conn:
+            load_from_sqlite(sqlite_conn, pg_conn, batch_size)
+        sqlite_conn.close()
         pg_conn.close()
     except psycopg2.OperationalError as error:
         logging.warning(

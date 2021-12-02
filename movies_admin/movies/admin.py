@@ -16,8 +16,9 @@ class FilmworkGenreInline(admin.TabularInline):
 @admin.register(Genre)
 class GenreAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
-    fields = ('name', 'description')
+    fields = ('name', 'description', 'updated_at')
     search_fields = ('name', 'description')
+    readonly_fields = ('created_at', 'updated_at')
 
 
 @admin.register(Filmwork)
@@ -25,15 +26,17 @@ class FilmWorkAdmin(admin.ModelAdmin):
     list_display = ('title', 'type', 'creation_date', 'rating', 'genres')
     fields = (
         'title', 'type', 'description', 'creation_date', 'certificate',
-        'file_path', 'rating'
+        'file_path', 'rating', 'updated_at'
     )
     list_filter = ('type', 'genre')
     search_fields = ('title', 'description')
     inlines = [FilmworkGenreInline, FilmworkPersonInline]
     list_per_page = 50
     sortable_by = ('rating',)
+    readonly_fields = ('created_at', 'updated_at')
 
-    def genres(self, obj):
+    @staticmethod
+    def genres(obj):
         return [
             filmwork_genre.genre.name for filmwork_genre in
             obj.filmwork_genres.all()
@@ -48,8 +51,9 @@ class FilmWorkAdmin(admin.ModelAdmin):
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'birth_date')
-    fields = ('full_name', 'birth_date')
+    fields = ('full_name', 'birth_date', 'updated_at')
     search_fields = ('full_name',)
+    readonly_fields = ('created_at', 'updated_at')
 
 
 @admin.register(FilmworkPerson)

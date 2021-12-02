@@ -3,9 +3,9 @@ from typing import Union
 
 from psycopg2.extensions import connection as PGSQLConnection
 
-from sqlite_to_postgres.models import (Genre, GenreFilm, Movie, Person,
-                                       PersonFilm)
-from sqlite_to_postgres.utils import Tables
+from models import (Genre, GenreFilm, Movie, Person,
+                    PersonFilm)
+from utils import Tables
 
 
 class BaseSQLConnector:

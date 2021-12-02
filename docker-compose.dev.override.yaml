@@ -1,0 +1,34 @@
+services:
+  db:
+    env_file:
+      - envs/dev.env
+    networks:
+      - proxynet
+
+  web_admin_panel:
+    env_file:
+      - envs/dev.env
+    networks:
+      - proxynet
+
+  elasticsearch:
+    env_file:
+      - envs/dev.env
+    ports:
+      - "9200:9200"
+    networks:
+      - proxynet
+
+  etl:
+    env_file:
+      - envs/dev.env
+    networks:
+      - proxynet
+
+  nginx:
+    networks:
+      - proxynet
+
+networks:
+  proxynet:
+    name: yandex_network

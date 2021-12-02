@@ -2,7 +2,7 @@
 
 -- Создание БД movies.
 CREATE DATABASE movies;
-\c movies 
+\c movies;
 -- Создание схемы content.
 CREATE SCHEMA IF NOT EXISTS content;
 -- Настройка search_path для дальнейшего создания таблиц.
