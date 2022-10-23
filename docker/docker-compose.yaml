@@ -1,0 +1,171 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    container_name: db
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_movies_data:/var/lib/postgresql/data/
+      - ../schema_design/db_schema.sql:/docker-entrypoint-initdb.d/init.sql
+    env_file:
+      - envs/prod.env
+    healthcheck:
+      test: pg_isready -q -U $${POSTGRES_USER}
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  web_admin_panel:
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/DockerfileAdmin
+    restart: always
+    container_name: web_admin_panel
+    volumes:
+      - static_value:/code/static/
+    depends_on:
+      - db
+    env_file:
+      - envs/prod.env
+
+  elasticsearch:
+    image: elasticsearch:7.17.5
+    container_name: elasticsearch
+    depends_on:
+      - db
+    env_file:
+      - envs/prod.env
+    expose:
+      - 9200
+    environment:
+      - discovery.type=single-node
+    healthcheck:
+      test: [ "CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1" ]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    volumes:
+      - elastic_movies_data:/usr/share/elasticsearch/data
+
+  nginx:
+    image: nginx:1.19.3
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ../nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ../nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+      - static_value:/var/html/static/
+    depends_on:
+      - web_admin_panel
+      - async_api
+      - auth
+      - ugcapp
+
+  etl:
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/DockerfileETL
+    restart: always
+    container_name: etl
+    depends_on:
+      - elasticsearch
+    env_file:
+      - envs/prod.env
+    volumes:
+      - etl_data:/code/states
+      - etl_data:/code/logs
+
+  redis:
+    image: redis:6.2.6-alpine
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  async_api:
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/DockerfileAsyncApi
+    env_file:
+      - envs/prod.env
+    restart: always
+    container_name: async_api
+    depends_on:
+      redis:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_started
+
+  auth_db:
+    image: postgres:13
+    container_name: auth_db
+    ports:
+      - 5433:5433
+    volumes:
+      - postgres_auth_data:/var/lib/postgresql/data
+      - ../schema_design/scripts:/docker-entrypoint-initdb.d/
+    env_file:
+      - envs/auth.env
+    healthcheck:
+      test: pg_isready -q -U $${POSTGRES_USER}
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  auth:
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/DockerfileAuth
+    container_name: auth
+    depends_on:
+      auth_db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file: envs/auth.env
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - 16686:16686
+
+  load_data:
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/DockerfileLoad
+    container_name: load_data
+    depends_on:
+      - db
+    env_file:
+      - envs/prod.env
+
+  ugcapp:
+    build:
+      context: ..
+      dockerfile: docker/dockerfiles/DockerfileUgcApp
+    env_file: envs/prod.env
+    depends_on:
+      broker:
+        condition: service_started
+
+#  ugcetl:
+#    build:
+#      context: ..
+#      dockerfile: docker/dockerfiles/DockerfileUgcETL
+#    env_file: envs/prod.env
+#    depends_on:
+#      broker:
+#        condition: service_started
+#      clickhouse-node1:
+#        condition: service_started
+
+volumes:
+  postgres_movies_data:
+  static_value:
+  elastic_movies_data:
+  etl_data:
+  postgres_auth_data:

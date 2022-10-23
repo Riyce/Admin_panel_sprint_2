@@ -1,0 +1,62 @@
+services:
+  db:
+    env_file:
+      - envs/dev.env
+    networks:
+      - proxynet
+
+  web_admin_panel:
+    env_file:
+      - envs/dev.env
+    networks:
+      - proxynet
+
+  elasticsearch:
+    env_file:
+      - envs/dev.env
+    ports:
+      - "9200:9200"
+    networks:
+      - proxynet
+
+  etl:
+    env_file:
+      - envs/dev.env
+    networks:
+      - proxynet
+
+  nginx:
+    networks:
+      - proxynet
+
+  redis:
+    networks:
+      - proxynet
+
+  async_api:
+    env_file:
+      - envs/dev.env
+    networks:
+      - proxynet
+
+  auth_db:
+    env_file:
+      - envs/auth_dev.env
+    networks:
+      - proxynet
+
+  auth:
+    env_file:
+      - envs/auth_dev.env
+    networks:
+      - proxynet
+
+  load_data:
+    env_file:
+      - envs/dev.env
+    networks:
+      - proxynet
+
+networks:
+  proxynet:
+    name: yandex_network

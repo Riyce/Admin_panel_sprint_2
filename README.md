@@ -32,5 +32,6 @@
 - **python3 manage.py createsuperuser**
 <br> Укажите свои данные.
 - **exit**
+DOCKER_BUILDKIT=1 docker-compose -f docker-compose.yaml -f docker-compose.dev.override.yaml up --build --force-recreate
 
 

@@ -1,0 +1,7 @@
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
+
+WORKDIR /code
+COPY /async_api/requirements/prod.txt .
+RUN pip3 install --upgrade pip && pip3 install -r prod.txt
+COPY /async_api .
+CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-c", "gunicorn.conf.py", "main:app"]

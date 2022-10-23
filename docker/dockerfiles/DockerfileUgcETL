@@ -1,0 +1,7 @@
+FROM python:3.9
+
+WORKDIR /code
+COPY /ugc/etl/requiremants.txt .
+RUN pip install --no-cache-dir -r requiremants.txt
+COPY /ugc/etl .
+CMD ["python", "main.py"]

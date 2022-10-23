@@ -1,0 +1,7 @@
+FROM python:3.9.7-buster
+
+WORKDIR /code
+COPY /postgres_to_es/requirements/base.txt .
+RUN pip3 install --upgrade pip && pip3 install -r base.txt
+COPY /postgres_to_es .
+CMD ["python3", "main.py", "--clear"]

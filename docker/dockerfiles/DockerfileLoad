@@ -1,0 +1,7 @@
+FROM python:3.9.7-buster
+
+WORKDIR /code
+COPY /sqlite_to_postgres/requirements.txt .
+RUN pip3 install --upgrade pip && pip3 install -r requirements.txt
+COPY /sqlite_to_postgres .
+CMD ["python3", "load_data.py"]
