@@ -74,7 +74,8 @@ CREATE TABLE IF NOT EXISTS "user"
     password_hash TEXT      NOT NULL,
     email         TEXT      NOT NULL UNIQUE,
     is_active     BOOLEAN   NOT NULL DEFAULT True,
-    created_at    TIMESTAMP NOT NULL DEFAULT NOW()
+    created_at    TIMESTAMP NOT NULL DEFAULT NOW(),
+    genres        TEXT[]
 );
 
 CREATE TABLE IF NOT EXISTS user_role

@@ -4,7 +4,6 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from auth.permitions import JWTBearer
 from models.filmwork import FilmworkBase
 from models.genre import GenreBase, GenreDetail
 from services.filmwork import FilmworkService, get_film_service
@@ -20,7 +19,6 @@ router = APIRouter()
     description="Genres list with pagination.",
     response_description="Name and id.",
     tags=["genre", "objects list"],
-    dependencies=[Depends(JWTBearer(["list_genres"]))],
 )
 async def genre_list(
     page: Optional[int] = Query(default=1, alias="page[number]"),
@@ -37,7 +35,6 @@ async def genre_list(
     description="Get genre by ID.",
     response_description="Name and id.",
     tags=["genre", "get by id"],
-    dependencies=[Depends(JWTBearer(["list_genres"]))],
 )
 async def genre_info(
     uuid: UUID,
@@ -56,7 +53,6 @@ async def genre_info(
     description="Get list of movies by genre name.",
     response_description="Movies name, rating and id.",
     tags=["genre", "film", "objects list"],
-    dependencies=[Depends(JWTBearer(["search_genres"]))],
 )
 async def genre_popular_films(
     name: str,

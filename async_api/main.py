@@ -10,8 +10,8 @@ from db import elasticsearch, redis
 
 app = FastAPI(
     title=config.PROJECT_NAME,
-    docs_url="/api/openapi",
-    openapi_url="/api/openapi.json",
+    docs_url="/api/apidocs",
+    openapi_url="/api/apidocs.json",
     default_response_class=ORJSONResponse,
     description="Information about movies, genres and people who participated in the creation of the work.",
     version="1.0.0",

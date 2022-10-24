@@ -4,7 +4,6 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from auth.permitions import JWTBearer
 from models.filmwork import FilmworkBase
 from models.person import PersonDetail
 from services.filmwork import FilmworkService, get_film_service
@@ -20,7 +19,6 @@ router = APIRouter()
     description="Get person by ID.",
     response_description="Detailed person information.",
     tags=["person", "get by id"],
-    dependencies=[Depends(JWTBearer(["list_persons"]))],
 )
 async def person_info(
     uuid: UUID,
@@ -39,7 +37,6 @@ async def person_info(
     description="Get list of movies by person id.",
     response_description="Movies name, rating and id.",
     tags=["person", "film", "objects list"],
-    dependencies=[Depends(JWTBearer(["search_persons"]))],
 )
 async def films_with_person(
     uuid: UUID,
@@ -57,7 +54,6 @@ async def films_with_person(
     description="Persons list with search by name.",
     response_description="Person`s name, id, roles and mowies.",
     tags=["person", "objects list", "search"],
-    dependencies=[Depends(JWTBearer(["search_persons"]))],
 )
 async def person_search(
     query: str,

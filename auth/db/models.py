@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 from typing import Optional
 
-from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer,
+from sqlalchemy import (ARRAY, Boolean, Column, DateTime, ForeignKey, Integer,
                         PrimaryKeyConstraint, String, Table, Text,
                         UniqueConstraint, or_)
 
@@ -34,6 +34,7 @@ class User(Base):
     email = Column(String, unique=True, nullable=True)
     created_at = Column(DateTime, default=datetime.now)
     is_active = Column(Boolean, default=True)
+    genres = Column(ARRAY(String))
     roles = relationship("UserRole", back_populates="user")
 
     @classmethod
