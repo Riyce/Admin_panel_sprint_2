@@ -53,7 +53,7 @@ class redis_cache(Cacher):
         self.ttl = ttl
 
     def form_key(self, args: Tuple[Any], kwargs: Dict[str, str]) -> str:
-        payload = {**{i: arg for i, arg in enumerate(args[1:])}, **kwargs}
+        payload = {**{i: arg for i, arg in enumerate(args)}, **kwargs}
         redis_key = "::".join([f"{key}:{value}" for key, value in payload.items() if value])
         return f"{self.namespace}-{redis_key}"
 
