@@ -149,6 +149,8 @@ services:
       dockerfile: docker/dockerfiles/DockerfileUgcApp
     env_file: envs/prod.env
     depends_on:
+      mongodb:
+        condition: service_started
       broker:
         condition: service_started
 

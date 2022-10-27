@@ -1,5 +1,5 @@
 import uvicorn
-from core.sentry_fastapi import sentry_init
+# from core.sentry_fastapi import sentry_init
 from db import kafka, mongo
 from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
@@ -8,7 +8,7 @@ from api.v1.bookmark import router as bookmark_router
 from api.v1.progress import router as progress_router
 from api.v1.rating import router as rating_router
 
-sentry_init()
+# sentry_init()
 app = FastAPI(
     title="UGC API",
     docs_url="/ugc/apidocs",
