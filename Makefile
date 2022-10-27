@@ -19,6 +19,12 @@ start_base_m1: ## Start Admin, auth, etl, redis, elasticsearch and 2 postgres
 stop_base_m1: ## Stop Admin, auth, etl, elasticsearch and 2 postgres
 		 cd docker && DOCKER_BUILDKIT=1 docker-compose ${compose_base_m1} down
 
+start_lite:
+		cd docker && DOCKER_BUILDKIT=1 docker-compose -f docker-compose-base.yaml up -d --build --force-recreate
+
+stop_lite:
+		cd docker && DOCKER_BUILDKIT=1 docker-compose -f docker-compose-base.yaml down
+
 init:  ## First and full initialization. Create database, superuser and collect static files
 	docker exec -it web_admin_panel bash -c \
 	'python manage.py migrate && python manage.py createsuperuser --noinput && python manage.py collectstatic --noinput'

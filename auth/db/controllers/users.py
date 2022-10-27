@@ -79,6 +79,11 @@ class UserController:
             history.append(obj_)
         return history
 
+    def get_user_genres(self, user_id: str) -> list[str]:
+        user = db_session.query(self.MODEL).filter_by(id=user_id).first()
+        db_session.commit()
+        return user.genres
+
     def add_login_record(self, payload: dict) -> None:
         new_obj = LoginHistory(**payload)
         db_session.add(new_obj)

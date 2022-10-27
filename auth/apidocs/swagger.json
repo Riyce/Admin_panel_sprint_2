@@ -28,6 +28,14 @@
       },
       "type": "object"
     },
+    "GenreList": {
+      "properties": {
+        "genre": {
+          "type": "string"
+        }
+      },
+      "type": "array"
+    },
     "LoginHistory": {
       "properties": {
         "id": {
@@ -129,6 +137,27 @@
     "version": "1.0.1"
   },
   "paths": {
+    "/genres": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GenreList"
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "summary": "Get users genres.",
+        "tags": [
+          "user"
+        ]
+      }
+    },
     "/access/action": {
       "delete": {
         "parameters": [

@@ -133,6 +133,16 @@ class UserLogoutAllView(BaseView):
         return {"message": "You logged out."}, HTTPStatus.OK
 
 
+class UserGenresView(BaseView):
+    @jwt_required()
+    def get(self):
+        identity = get_jwt_identity()
+        user_id = identity.get("user_id")
+        controller = UserController()
+        user_genres = controller.get_user_genres(user_id)
+        return {"genres": user_genres}, HTTPStatus.OK
+
+
 class UserChangeView(BaseView):
     FIELDS = ["login", "password", "old_password"]
 
@@ -173,3 +183,4 @@ api.add_resource(UserHistoryView, "/auth/v1/history")
 api.add_resource(UserLogoutView, "/auth/v1/logout")
 api.add_resource(UserLogoutAllView, "/auth/v1/logout-all")
 api.add_resource(UserChangeView, "/auth/v1/profile")
+api.add_resource(UserGenresView, "/auth/v1/genres")
