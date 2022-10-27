@@ -140,7 +140,7 @@ class UserGenresView(BaseView):
         user_id = identity.get("user_id")
         controller = UserController()
         user_genres = controller.get_user_genres(user_id)
-        return {"genres": user_genres}, HTTPStatus.OK
+        return {"genres": user_genres, "user_id": user_id}, HTTPStatus.OK
 
 
 class UserChangeView(BaseView):

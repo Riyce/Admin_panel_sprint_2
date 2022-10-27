@@ -34,4 +34,5 @@ migrate:  ## Apply migrations only
 
 restart: stop_base start_base
 restart_m1: stop_base_m1 start_base_m1
+restart_lite: stop_lite start_lite
 		
