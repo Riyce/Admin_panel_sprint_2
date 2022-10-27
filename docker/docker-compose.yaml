@@ -152,16 +152,17 @@ services:
       broker:
         condition: service_started
 
-#  ugcetl:
-#    build:
-#      context: ..
-#      dockerfile: docker/dockerfiles/DockerfileUgcETL
-#    env_file: envs/prod.env
-#    depends_on:
-#      broker:
-#        condition: service_started
-#      clickhouse-node1:
-#        condition: service_started
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - mongo_db_data:/data/db
+    ports:
+      - 27017:27017
+    restart: unless-stopped
 
 volumes:
   postgres_movies_data:
@@ -169,3 +170,4 @@ volumes:
   elastic_movies_data:
   etl_data:
   postgres_auth_data:
+  mongo_db_data:
