@@ -1,9 +1,11 @@
+import json
 import logging
 from functools import lru_cache
 from typing import List, Optional
 from uuid import uuid4
 
 from core.config import config
+from db.kafka import KafkaHandler, get_kafka_handler
 from db.mongo import get_mongo_client
 from fastapi import Depends
 from models.like import MovieLike, ReviewLike
@@ -14,9 +16,10 @@ logger = logging.getLogger(__name__)
 
 
 class RatingService:
-    def __init__(self, mongo: AsyncIOMotorClient):
+    def __init__(self, mongo: AsyncIOMotorClient, kafka: KafkaHandler):
         self.mongo = mongo
         self.db = self.mongo[config.MONGO_DB]
+        self.storage = kafka
 
     async def add_review_like(self, like: ReviewLike) -> str:
         collection = self.db[config.MONGO_REVIEW_LIKES_COLLECTION_NAME]
@@ -24,6 +27,9 @@ class RatingService:
         return like.inserted_id
 
     async def add_movie_like(self, like: MovieLike) -> str:
+        value = json.dumps({"rating": like.score, "movie_id": like.movie_id}).encode()
+        key = like.user_id.encode()
+        await self.storage.send(topic=config.MOVIE_LIKE_TOPIC, value=value, key=key)
         collection = self.db[config.MONGO_MOVIE_LIKES_COLLECTION_NAME]
         like = await collection.insert_one(like.dict())
         return like.inserted_id
@@ -61,5 +67,6 @@ class RatingService:
 @lru_cache()
 def get_rating_service(
     mongo_storage: AsyncIOMotorClient = Depends(get_mongo_client),
+    kafka_storage: KafkaHandler = Depends(get_kafka_handler)
 ) -> RatingService:
-    return RatingService(mongo=mongo_storage)
+    return RatingService(mongo=mongo_storage, kafka=kafka_storage)

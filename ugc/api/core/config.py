@@ -5,8 +5,9 @@ from pydantic import BaseSettings
 
 
 class Config(BaseSettings):
-    MOVIE_PROGRESS_TOPIC = "movie_progress"
-    MOVIE_ONLINE_TOPIC = "online"
+    MOVIE_PROGRESS_TOPIC: str = "movie_progress"
+    MOVIE_ONLINE_TOPIC: str = "online"
+    MOVIE_LIKE_TOPIC: str = "like"
     KAFKA_HOST: str = "localhost"
     KAFKA_PORT: int = 9092
     SECRET_KEY: str = "extra secret"
