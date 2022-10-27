@@ -1,5 +1,9 @@
 version: '3.8'
 
+networks:
+  default:
+    name: cinema-network
+
 services:
   db:
     image: postgres:13
@@ -41,6 +45,7 @@ services:
       - 9200
     environment:
       - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms200m -Xmx200m"
     healthcheck:
       test: [ "CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1" ]
       interval: 30s
