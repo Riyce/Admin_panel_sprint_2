@@ -81,7 +81,7 @@ async def film_search(
 
 @router.get(
     "/names",
-    response_model=list[FilmworkName],
+    response_model=list[FilmworkBase],
     summary="Movies list with names.",
     description="Movies names list.",
     response_description="Movies name.",
@@ -90,6 +90,6 @@ async def film_search(
 async def film_names(
     ids: str,
     film_service: FilmworkService = Depends(get_film_service),
-) -> list[FilmworkName]:
-    filmworks = await film_service.get_filmworks_names_list(uuid=ids)
+) -> list[FilmworkBase]:
+    filmworks = await film_service.get_filmworks_list(uuid=ids.split(","))
     return filmworks

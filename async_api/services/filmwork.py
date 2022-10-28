@@ -29,8 +29,6 @@ class FilmworkService(BaseService):
         "writers",
         "directors",
     ]
-    NAME_FIELDS = ["id", "title"]
-    NAME_MODELS = FilmworkName
 
     @redis_cache(namespace="filmwork", ttl=config.REIDS_RECORD_LIVE_TIME)
     async def get_filmwork(self, uuid: str) -> Optional[FilmworkDetail]:
@@ -40,18 +38,6 @@ class FilmworkService(BaseService):
     @redis_cache(namespace="filmwork", ttl=config.REIDS_RECORD_LIVE_TIME)
     async def get_filmworks_list(self, **kwargs) -> list[FilmworkBase]:
         filmworks_objs = await self.get_obj_list(**kwargs)
-        return filmworks_objs
-
-    @redis_cache(namespace="filmwork", ttl=config.REIDS_RECORD_LIVE_TIME)
-    async def get_filmworks_names_list(self, **kwargs) -> list[FilmworkName]:
-        uuid_list = kwargs["uuid"].split(",")
-        results = await self.es.execute(
-            index=self.INDEX,
-            query_search_fields=self.SEARCH_FIELDS,
-            source=self.NAME_FIELDS,
-            uuid=uuid_list
-        )
-        filmworks_objs = [self.NAME_MODELS.parse_obj(result["_source"]) for result in results["hits"]["hits"]]
         return filmworks_objs
 
 
