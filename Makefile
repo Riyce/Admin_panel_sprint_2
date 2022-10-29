@@ -1,7 +1,7 @@
 ## ----------------------------------------------------------------------
 ## Makefile.
 ## ----------------------------------------------------------------------
-compose_base = -f docker-compose.yaml -f docker-compose-kafka.yaml
+compose_base = -f docker-compose.yaml -f docker-compose-kafka.yaml -f docker-compose-elk.yaml
 compose_base_m1 = -f docker-compose.yaml -f docker-compose-kafka-arm64.yaml
 
 help:     ## Show this help.
