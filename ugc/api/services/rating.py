@@ -27,7 +27,7 @@ class RatingService:
         return like.inserted_id
 
     async def add_movie_like(self, like: MovieLike) -> str:
-        value = json.dumps({"rating": like.score, "movie_id": like.movie_id}).encode()
+        value = json.dumps(like.dict()).encode()
         key = like.user_id.encode()
         await self.storage.send(topic=config.MOVIE_LIKE_TOPIC, value=value, key=key)
         collection = self.db[config.MONGO_MOVIE_LIKES_COLLECTION_NAME]
