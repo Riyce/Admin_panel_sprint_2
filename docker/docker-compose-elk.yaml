@@ -1,16 +1,14 @@
 version: '2.2'
-
 services:
   logstash:
     image: logstash:7.10.1
-    container_name: logstash
     environment:
       XPACK_MONITORING_ENABLED: "false"
-      ES_HOST: "es_logstash:9200"
+      ES_HOST: "elasticlogstash:9200"
     ports:
       - "5044:5044/udp"
     depends_on:
-      - es_logstash
+      - elasticlogstash
     volumes:
       - ./deploy/logstash.conf:/config/logstash.conf:ro
     command: logstash -f /config/logstash.conf
@@ -23,28 +21,27 @@ services:
     depends_on:
       - nginx
       - logstash
-      - es_logstash
+      - elasticlogstash
       - kibana
     links:
       - logstash
 
   
-  es_logstash:  # Отдельный от полнотекстового поиска инстанс
+  elasticlogstash:  # Отдельный от полнотекстового поиска инстанс
     image: elasticsearch:7.17.5
-    container_name: es_logstash
-    ports:
-      - 9200:9200
     environment:
       # Указываем ES запуститься в одном экземпляре
       - discovery.type=single-node
       # Ограничим использование памяти
       - "ES_JAVA_OPTS=-Xms200m -Xmx200m"
+    ports:
+      - 9200:9200
     volumes:
-      - /tmp/esdata:/tmp/elasticsearch/data
+      - /tmp/esdata:/tmp/elasticlogstash/data
 
   kibana:
     image: kibana:7.17.5
     ports:
       - "5601:5601"
     depends_on:
-      - es_logstash
+      - elasticlogstash
