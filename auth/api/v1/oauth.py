@@ -50,5 +50,5 @@ class SocialCallbackView(BaseView):
         }, HTTPStatus.OK
 
 
-api.add_resource(SocialLogin, "/auth/v1/oauth/login/<string:provider>")
-api.add_resource(SocialCallbackView, "/auth/v1/oauth/callback/<string:provider>")
+api.add_resource(SocialLogin, "/api/v1/auth/oauth/login/<string:provider>")
+api.add_resource(SocialCallbackView, "/api/v1/auth/oauth/callback/<string:provider>")

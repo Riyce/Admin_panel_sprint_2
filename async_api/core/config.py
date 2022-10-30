@@ -16,7 +16,7 @@ REIDS_RECORD_LIVE_TIME = 60
 ELASTIC_HOST = os.getenv("ELASTIC_HOST", HOST_DEFAULT)
 ELASTIC_PORT = int(os.getenv("ELASTIC_PORT", 9200))
 
-USER_CHECK_URL = f"{os.getenv('AUTH_HOST', HOST_DEFAULT)}/auth/v1/check/action"
+USER_CHECK_URL = f"{os.getenv('AUTH_HOST', HOST_DEFAULT)}/api/v1/auth/check/action"
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent

@@ -16,9 +16,9 @@ app = FastAPI(
     default_response_class=ORJSONResponse,
 )
 
-app.include_router(progress_router, prefix="/ugc/v1")
-app.include_router(rating_router, prefix="/ugc/v1")
-app.include_router(bookmark_router, prefix="/ugc/v1")
+app.include_router(progress_router, prefix="/api/v1/ugc")
+app.include_router(rating_router, prefix="/api/v1/ugc")
+app.include_router(bookmark_router, prefix="/api/v1/ugc")
 
 
 @app.on_event("startup")

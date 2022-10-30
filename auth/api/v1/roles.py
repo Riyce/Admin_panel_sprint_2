@@ -119,5 +119,5 @@ class RoleAssignmentView(BaseView):
         return {"message": "Role removed from user.", "user_role": user_role.dict()}, HTTPStatus.ACCEPTED
 
 
-api.add_resource(RoleView, "/auth/v1/access/role")
-api.add_resource(RoleAssignmentView, "/auth/v1/access/assign")
+api.add_resource(RoleView, "/api/v1/auth/access/role")
+api.add_resource(RoleAssignmentView, "/api/v1/auth/access/assign")

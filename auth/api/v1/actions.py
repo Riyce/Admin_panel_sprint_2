@@ -69,5 +69,5 @@ class ActionsCheckView(BaseView):
             return {"message": "Your token has expired"}, HTTPStatus.UNAUTHORIZED
 
 
-api.add_resource(ActionView, "/auth/v1/access/action")
-api.add_resource(ActionsCheckView, "/auth/v1/check/action")
+api.add_resource(ActionView, "/api/v1/auth/access/action")
+api.add_resource(ActionsCheckView, "/api/v1/auth/check/action")
