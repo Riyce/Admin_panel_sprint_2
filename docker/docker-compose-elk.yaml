@@ -34,14 +34,14 @@ services:
       - discovery.type=single-node
       # Ограничим использование памяти
       - "ES_JAVA_OPTS=-Xms200m -Xmx200m"
-    ports:
-      - 9200:9200
     volumes:
       - /tmp/esdata:/tmp/elasticlogstash/data
 
   kibana:
     image: kibana:7.17.5
     ports:
-      - "5601:5601"
+      - "5601:5601" 
+    environment:
+      ELASTICSEARCH_HOSTS: '["http://elasticlogstash:9200"]'
     depends_on:
       - elasticlogstash
