@@ -134,6 +134,22 @@ class UserLogoutAllView(BaseView):
 
 
 class UserGenresView(BaseView):
+    FIELDS = ["genre_name"]
+
+    @jwt_required()
+    def post(self):
+        identity = get_jwt_identity()
+        user_id = identity.get("user_id")
+        access_token = self.get_token(request)
+        agent = request.user_agent.string
+        token_storage = TokenStorage()
+        if not token_storage.is_valid_token(user_id, agent, access_token):
+            return {"message": "Refresh your access token."}, HTTPStatus.BAD_REQUEST
+        request_args = self.PARSER.parse_args()
+        genre = request_args["genre_name"]
+        UserController().add_genre(user_id, genre)
+        return {"message": "Genre added."}, HTTPStatus.CREATED
+
     @jwt_required()
     def get(self):
         identity = get_jwt_identity()
@@ -176,11 +192,11 @@ class UserChangeView(BaseView):
         return {"message": "Your profile updated."}, HTTPStatus.OK
 
 
-api.add_resource(UserCreationView, "/auth/v1/sign-up")
-api.add_resource(UserLoginView, "/auth/v1/login")
-api.add_resource(UserRefreshView, "/auth/v1/refresh")
-api.add_resource(UserHistoryView, "/auth/v1/history")
-api.add_resource(UserLogoutView, "/auth/v1/logout")
-api.add_resource(UserLogoutAllView, "/auth/v1/logout-all")
-api.add_resource(UserChangeView, "/auth/v1/profile")
-api.add_resource(UserGenresView, "/auth/v1/genres")
+api.add_resource(UserCreationView, "/api/v1/auth/sign-up")
+api.add_resource(UserLoginView, "/api/v1/auth/login")
+api.add_resource(UserRefreshView, "/api/v1/auth/refresh")
+api.add_resource(UserHistoryView, "/api/v1/auth/history")
+api.add_resource(UserLogoutView, "/api/v1/auth/logout")
+api.add_resource(UserLogoutAllView, "/api/v1/auth/logout-all")
+api.add_resource(UserChangeView, "/api/v1/auth/profile")
+api.add_resource(UserGenresView, "/api/v1/auth/genres")

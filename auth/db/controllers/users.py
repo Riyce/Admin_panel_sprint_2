@@ -1,4 +1,5 @@
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm.attributes import flag_modified
 from sqlalchemy.orm.query import Query
 
 from db.base import db_session
@@ -11,6 +12,19 @@ class UserController:
     MODEL = User
     SEARCH_FIELD = "login"
     DEFAULT_ROLE_ID = 1
+
+    def add_genre(self, user_id: str, genre: str) -> None:
+        user = db_session.query(self.MODEL).filter_by(id=user_id).first()
+        genres = user.genres
+        if genres:
+            if genre not in genres:
+                user.genres.append(genre)
+                flag_modified(user, "genres")
+                db_session.merge(user)
+                db_session.flush()
+        else:
+            user.genres = [genre]
+        db_session.commit()
 
     def create(self, payload: dict, role_id: int = None) -> None:
         new_user = self.MODEL(**payload)
