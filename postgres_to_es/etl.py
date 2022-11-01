@@ -34,8 +34,9 @@ class ETL:
         method = getattr(self, f'run_etl_{index}')
         try:
             method(exttractor_class, transformer, entity)
-        except AttributeError:
-            pass
+        except AttributeError as err:
+            logger.error(err)
+
         finally:
             exttractor_class.connection.close()
 

@@ -44,8 +44,10 @@ class Extractor:
     def get_start_time(self) -> str:
         start_time = self.state.get_state(self.source.value)
         if not start_time:
-            start_time = str(datetime.utcnow())
+            # start_time = str(datetime.utcnow())
+            start_time = str(datetime.min)
             self.state.set_state(self.source.value, start_time)
+        logger.debug(f"Start time {start_time}")
         return start_time
 
     @backoff(logger)

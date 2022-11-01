@@ -25,7 +25,7 @@ services:
     build:
       context: ..
       dockerfile: docker/dockerfiles/DockerfileAdmin
-    restart: always
+    restart: unless-stopped
     container_name: web_admin_panel
     volumes:
       - static_value:/code/static/
@@ -75,7 +75,7 @@ services:
     build:
       context: ..
       dockerfile: docker/dockerfiles/DockerfileETL
-    restart: always
+    restart: unless-stopped
     container_name: etl
     depends_on:
       - elasticsearch
@@ -99,7 +99,7 @@ services:
       dockerfile: docker/dockerfiles/DockerfileAsyncApi
     env_file:
       - envs/prod.env
-    restart: always
+    restart: unless-stopped
     container_name: async_api
     depends_on:
       redis:

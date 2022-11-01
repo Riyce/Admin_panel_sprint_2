@@ -18,7 +18,9 @@ def backoff(
                 try:
                     return func(*args, **kwargs)
                 except Exception as e:
-                    logger.warning(f'Try: {attempt} \n {e}')
+                    logger.error(
+                        f'{func.__name__} retry: {attempt}. Error: {e}'
+                    )
                     sleep(delay)
                     attempt += 1
                     new_time = start_sleep_time * factor
