@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     PASSWORD_SALT: str = "extra salt"
     HASH_ALGORITHM: str = "sha256"
     ACCESS_TOKEN_TTL: int = 5 * 60 * 60
-    JWT_ACCESS_TOKEN_EXPIRES: int = 5 * 60
+    JWT_ACCESS_TOKEN_EXPIRES: int = 15 * 60
     REFRESH_TOKEN_TTL: int = 60 * 60 * 24 * 15
     JWT_REFRESH_TOKEN_EXPIRES: int = 60 * 60 * 24 * 15
     REDIS_PREFIX: str = "auth"

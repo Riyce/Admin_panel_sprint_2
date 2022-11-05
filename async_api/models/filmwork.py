@@ -14,7 +14,7 @@ class FilmworkName(BaseModel):
 
 
 class FilmworkBase(FilmworkName):
-    imdb_rating: float
+    imdb_rating: Optional[float]
 
 
 class FilmworkDetail(FilmworkBase):
