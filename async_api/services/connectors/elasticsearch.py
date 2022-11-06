@@ -29,6 +29,7 @@ class ElasticSearchConnector:
         filter_actor = kwargs.get("filter_actor")
         filter_director = kwargs.get("filter_director")
         filter_writer = kwargs.get("filter_writer")
+        exclude = kwargs.get("exclude")
         from_ = (page - 1) * size
         search = search.extra(**{"from": from_, "size": size})
         if query:
@@ -45,6 +46,9 @@ class ElasticSearchConnector:
             search = search.query(
                 "nested", path="writers", query=Q("bool", filter=Q("term", writers__id=filter_writer))
             )
+        if exclude:
+            exclude_list = exclude.split(";")
+            search = search.exclude("terms", _id=exclude_list)
         if sort:
             search = search.sort(sort)
         return search

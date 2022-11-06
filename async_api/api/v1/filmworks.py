@@ -42,6 +42,7 @@ async def film_list(
     sort: Optional[str] = None,
     page: Optional[int] = Query(default=1, alias="page[number]"),
     size: Optional[int] = Query(default=50, alias="page[size]"),
+    exclude: Optional[str] = Query(default=None, alias="exclude"),
     filter_genre: Optional[str] = Query(default=None, alias="filter[genre]"),
     filter_actor: Optional[str] = Query(default=None, alias="filter[actor]"),
     filter_director: Optional[str] = Query(default=None, alias="filter[director]"),
@@ -56,6 +57,7 @@ async def film_list(
         filter_actor=filter_actor,
         filter_director=filter_director,
         filter_writer=filter_writer,
+        exclude=exclude
     )
     return filmworks
 

@@ -25,7 +25,7 @@ class AuthService:
             async with session.get(USER_CHECK_URL) as r:
                 json_body = await r.json()
                 if r.status == status.HTTP_200_OK:
-                    pass
+                    return json_body
                 elif r.status == status.HTTP_403_FORBIDDEN:
                     raise HTTPException(
                         status_code=status.HTTP_403_FORBIDDEN, detail=json_body['message']
@@ -34,5 +34,3 @@ class AuthService:
                     raise HTTPException(
                         status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=json_body
                     )
-
-        return None
