@@ -149,6 +149,9 @@ services:
       - db
     env_file:
       - envs/prod.env
+    volumes:
+      - ../schema_design/db.sqlite:/code/db.sqlite
+
 
   ugcapp:
     build:
